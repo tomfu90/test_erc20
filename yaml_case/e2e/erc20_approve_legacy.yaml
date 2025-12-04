@@ -1,0 +1,9 @@
+#erc20_approve_legacy.yaml
+success:
+  - case_id: 1
+    case_name: "ERC20-Legacy approve流程"
+    description: "Legacy类型：授权方给被授权方设置代币额度"
+    tx_version: Legacy
+    sender_pk: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    recipient: "0x70997970c51812dc3a010c7d01b50e0d17dc79c8"
+    approve_amount: 100

@@ -1,0 +1,10 @@
+#erc20_transfer_eip1559.yaml
+success:
+  - case_id: 1
+    case_name: "ERC20-eip15589转账流程"
+    description: "erc20转账"
+    tx_version: eip-1559
+    sender_pk: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    recipient: "0x70997970c51812dc3a010c7d01b50e0d17dc79c8"
+    amount: 100
+

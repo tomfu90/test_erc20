@@ -1,0 +1,132 @@
+#erc20_eip1559_transferfrom_unit.yaml
+
+  - case_id: 001
+    case_name: "usdt授权转账失败：eth充足，gas明显低于21000"
+    description: "gas设置过低，授权转账失败"
+    tx_version: eip-1559
+    owner_pk: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    spender: "0x90f79bf6eb2c4f870365e785982e1f101e93b906"
+    spender_pk: "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6"
+    receipt: "0x15d34aaf54267db7d7c367839aaf71a00a2c6a65"
+    mark: "low_gas"
+    input:
+      gas: 1000
+      maxPriorityFeePerGas: 2
+      maxFeePerGas: 50
+      approve_amount: 100
+      transfer_amount: 50
+
+
+  - case_id: 002
+    case_name: "usdt授权转账失败：授权转账金额超过授权额度"
+    description: "超出授权额度"
+    tx_version: eip-1559
+    owner_pk: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    spender: "0x90f79bf6eb2c4f870365e785982e1f101e93b906"
+    spender_pk: "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6"
+    receipt: "0x15d34aaf54267db7d7c367839aaf71a00a2c6a65"
+    mark: "low_coin"
+    input:
+      gas: 90000
+      maxPriorityFeePerGas: 2
+      maxFeePerGas: 50
+      approve_amount: 10
+      transfer_amount: 50
+
+  - case_id: 003
+    case_name: "usdt授权转账失败：授权额度范围内授权转账金额超过代币持有者余额"
+    description: "在授权额度内，转账金额超过代币持有者余额"
+    tx_version: eip-1559
+    owner_pk: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    spender: "0x90f79bf6eb2c4f870365e785982e1f101e93b906"
+    spender_pk: "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6"
+    receipt: "0x15d34aaf54267db7d7c367839aaf71a00a2c6a65"
+    mark: "low_coin"
+    input:
+      gas: 90000
+      maxPriorityFeePerGas: 2
+      maxFeePerGas: 50
+      approve_amount: 1000000000
+      transfer_amount: 5000000
+
+  - case_id: 004
+    case_name: "usdt授权转账失败：授权取消，授权转账失败"
+    description: "授权取消，授权转账失败"
+    tx_version: eip-1559
+    owner_pk: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    spender: "0x90f79bf6eb2c4f870365e785982e1f101e93b906"
+    spender_pk: "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6"
+    receipt: "0x15d34aaf54267db7d7c367839aaf71a00a2c6a65"
+    mark: "cancel"
+    input:
+      gas: 90000
+      maxPriorityFeePerGas: 2
+      maxFeePerGas: 50
+      approve_amount: 100
+      transfer_amount: 50
+
+
+  - case_id: 005
+    case_name: "usdt授权转账失败：触发幂等"
+    description: "触发幂等，2次重复交易"
+    tx_version: eip-1559
+    owner_pk: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    spender: "0x90f79bf6eb2c4f870365e785982e1f101e93b906"
+    spender_pk: "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6"
+    receipt: "0x15d34aaf54267db7d7c367839aaf71a00a2c6a65"
+    mark: "repeat"
+    input:
+      gas: 90000
+      maxPriorityFeePerGas: 2
+      maxFeePerGas: 50
+      approve_amount: 100
+      transfer_amount: 30
+
+  - case_id: 006
+    case_name: "usdt授权转账失败：签名被篡改"
+    description: "正常签名后，又篡改了签名内容，授权转账失败"
+    tx_version: eip-1559
+    owner_pk: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    spender: "0x90f79bf6eb2c4f870365e785982e1f101e93b906"
+    spender_pk: "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6"
+    receipt: "0x15d34aaf54267db7d7c367839aaf71a00a2c6a65"
+    mark: "invalid_sign"
+    input:
+      gas: 90000
+      maxPriorityFeePerGas: 2
+      maxFeePerGas: 50
+      approve_amount: 100
+      transfer_amount: 50
+
+  - case_id: 007
+    case_name: "usdt授权转账失败：maxFeePerGas小于baseFee"
+    description: "maxFeePerGas小于baseFee"
+    tx_version: eip-1559
+    owner_pk: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    spender: "0x90f79bf6eb2c4f870365e785982e1f101e93b906"
+    spender_pk: "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6"
+    receipt: "0x15d34aaf54267db7d7c367839aaf71a00a2c6a65"
+    mark: "fee_wrong"
+    input:
+      gas: 90000
+      maxPriorityFeePerGas: 2
+      maxFeePerGas: 0.000001
+      approve_amount: 100
+      transfer_amount: 50
+
+
+  - case_id: 008
+    case_name: "usdt授权转账失败：maxFeePerGas小于maxPriorityFeePerGas"
+    description: "maxFeePerGas小于baseFee"
+    tx_version: eip-1559
+    owner_pk: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    spender: "0x90f79bf6eb2c4f870365e785982e1f101e93b906"
+    spender_pk: "0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6"
+    receipt: "0x15d34aaf54267db7d7c367839aaf71a00a2c6a65"
+    mark: "fee_wrong"
+    input:
+      gas: 90000
+      maxPriorityFeePerGas: 70
+      maxFeePerGas: 60
+      approve_amount: 100
+      transfer_amount: 50
