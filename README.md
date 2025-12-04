@@ -12,3 +12,4 @@
 | 可视化报告          | Allure 生成含交易详情、日志解析、断言结果的可视化报告                |
 | 自动化校验          | 自动验证交易状态、余额变更、Transfer 事件日志一致性                  |
 
+<img width="2491" height="1162" alt="image" src="https://github.com/user-attachments/assets/ae40d151-8882-4e79-a9dc-db477c791934" />
