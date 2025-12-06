@@ -11,6 +11,7 @@
 | <kbd>ERC721</kbd> | E2E端到端场景    | 2个      | 100%   | 多Token批量授权链、单Token全生命周期流转，覆盖Legacy/EIP-1559交易类型           |
 
 <br>
+<img width="2036" height="1125" alt="合约测试落地" src="https://github.com/user-attachments/assets/11426e94-cdd4-4bb3-951e-e50b35e90d59" />
 
 ## 🎯 核心ERC721 E2E场景
 
@@ -47,8 +48,5 @@
 
 <br>
 
-## 🚀 快速上手
-### 1. 安装依赖
-```bash
-pip install web3 pytest allure-pytest
-<img width="2036" height="1125" alt="合约测试落地" src="https://github.com/user-attachments/assets/ab69583f-a099-4a95-b9ae-364094c01c4a" />
+
+
