@@ -1,0 +1,81 @@
+name: "ERC721 多 Token + 批量授权（setApprovalForAll）+ 权限撤销 + 权限验证 的复杂端到端场景"
+description: "聚焦多个 NFT 多授权和撤销授权操作链: mint → transferFrom → setApprovalForAll（true） → approved transferFrom → setApprovalForAll（false）->approved transferFrom"
+
+steps:
+  - step: "步骤1:创世地址铸造nft1"
+    action: mint
+    token_id: "{{random_num_1}}" #取随机数，用渲染函数替换
+    address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"  #account[0]，创世地址
+    PRIVATE_KEY: "{{en.deployer_private_key}}"  #环境变量，用渲染函数替换,account[0]，创世地址秘钥
+    meta_uri: "fufu_baidu.com"
+
+  - step: "步骤2:创世地址铸造nft2"
+    action: mint
+    token_id: "{{random_num_2}}"
+    address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"  #account[0]，创世地址
+    PRIVATE_KEY: "{{en.deployer_private_key}}"  #环境变量，用渲染函数替换,account[0]，创世地址秘钥
+    meta_uri: "fufu_baidu.com"
+
+  - step: "步骤3:创世地址将nft1转移给其他地址"
+    action: transferFrom_owner
+    token_id: "{{token_id_1}}"
+    to_address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8" #account[1]，接受地址
+    PRIVATE_KEY: "{{en.deployer_private_key}}"  # account[0]创世地址秘钥
+    address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"  #account[0]，创世地址
+
+
+  - step: "步骤4:创世地址将nft2转移给其他地址"
+    action: transferFrom_owner
+    token_id: "{{token_id_2}}"
+    to_address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8" #account[1]，接受地址
+    PRIVATE_KEY: "{{en.deployer_private_key}}"  # account[0]创世地址秘钥
+    address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"  #account[0]，创世地址
+
+  - step: "步骤5:nft所有者批量授权(全部授权)给其他第三方地址"
+    action: ApprovalForAll_true
+    operator_address: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC" #account[2]，授权地址
+    PRIVATE_KEY: "{{en.address1_private_key}}" #account[1]，所有者地址秘钥
+    address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"  #account[1]，所有者地址
+
+
+  - step: "步骤6:查询地址已全部授权"
+    action: isApprovedForAll_true
+    input:
+      address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"  #account[1]，所有者地址
+      operator_address: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC" #account[2]，授权地址
+    expected:
+      result: True
+
+  - step: "步骤7:被授权者授权转账，将nft1转给其他第三方_成功"
+    action: transferFrom_approve_success
+    token_id: "{{token_id_1}}"
+    to_address: "0x90F79bf6EB2c4f870365E785982E1f101E93b906"  #account[3]，授权转账的接受地址
+    owner_address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8" #account[1]，所有者地址
+    PRIVATE_KEY: "{{en.address2_private_key}}" #account[2]，被授权者地址秘钥
+    operator_address: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC" #account[2]，授权地址
+
+  - step: "步骤8:nft所有者取消批量授权"
+    action: ApprovalForAll_false
+    operator_address: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC" #account[2]，授权地址
+    PRIVATE_KEY: "{{en.address1_private_key}}" #account[1]，所有者地址秘钥
+    address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"  #account[1]，所有者地址
+
+  - step: "步骤9:查询地址已取消批量授权"
+    action: isApprovedForAll_false
+    input:
+      address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"  #account[1]，所有者地址
+      operator_address: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC" #account[2]，授权地址
+    expected:
+      result: False
+
+  - step: "步骤10:被授权者授权转账，将nft2转给其他第三方_失败"
+    action: transferFrom_approve_false
+    token_id: "{{token_id_2}}"
+    to_address: "0x90F79bf6EB2c4f870365E785982E1f101E93b906"  #account[3]，授权转账的接受地址
+    owner_address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8" #account[1]，所有者地址
+    PRIVATE_KEY: "{{en.address2_private_key}}" #account[2]，被授权者地址秘钥
+    operator_address: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC" #account[2]，授权地址
+
+
+
+

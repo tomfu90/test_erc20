@@ -31,8 +31,152 @@ def erc20_contract(web3):
         {"anonymous": False, "inputs": [{"indexed": True, "internalType": "address", "name": "owner", "type": "address"}, {"indexed": True, "internalType": "address", "name": "spender", "type": "address"}, {"indexed": False, "internalType": "uint256", "name": "value", "type": "uint256"}], "name": "Approval", "type": "event"}
     ]
     # 本地节点部署的地址
-    token_addr = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+    token_addr = "0x998abeb3E57409262aE5b751f60747921B33613E"
     contract = web3.eth.contract(address=token_addr, abi=token_abi)
-    print("😊 ERC20合约初始化成功")
     yield contract
 
+# 夹具3：初始化ERC721合约（全局复用，传入固定合约地址/ABI）
+@pytest.fixture(scope="session")
+def erc721_contract(web3):
+    # 固定合约ABI（仅保留核心功能，精简）
+    token_abi =  [
+    # ========== 读方法 ==========
+    {
+        "inputs": [],
+        "name": "name",
+        "outputs": [{"type": "string"}],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "symbol",
+        "outputs": [{"type": "string"}],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{"type": "address"}],
+        "name": "balanceOf",
+        "outputs": [{"type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{"type": "uint256"}],
+        "name": "ownerOf",
+        "outputs": [{"type": "address"}],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{"type": "uint256"}],
+        "name": "getApproved",
+        "outputs": [{"type": "address"}],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{"type": "address"}, {"type": "address"}],
+        "name": "isApprovedForAll",
+        "outputs": [{"type": "bool"}],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{"type": "uint256"}],
+        "name": "meta",
+        "outputs": [{"type": "string"}],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    # ========== 写方法 ==========
+    {
+        "inputs": [
+            {"type": "address"},
+            {"type": "uint256"},
+            {"type": "string"}
+        ],
+        "name": "mint",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {"type": "address"},
+            {"type": "uint256"},
+            {"type": "string"}
+        ],
+        "name": "safeMint",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{"type": "uint256"}],
+        "name": "burn",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{"type": "address"}, {"type": "uint256"}],
+        "name": "approve",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{"type": "address"}, {"type": "bool"}],
+        "name": "setApprovalForAll",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{"type": "address"}, {"type": "address"}, {"type": "uint256"}],
+        "name": "transferFrom",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    # ========== 事件 ==========
+    {
+        "anonymous": False,
+        "inputs": [
+            {"indexed": True, "type": "address", "name": "from"},
+            {"indexed": True, "type": "address", "name": "to"},
+            {"indexed": True, "type": "uint256", "name": "tokenId"}
+        ],
+        "name": "Transfer",
+        "type": "event"
+    },
+    {
+        "anonymous": False,
+        "inputs": [
+            {"indexed": True, "type": "address", "name": "owner"},
+            {"indexed": True, "type": "address", "name": "approved"},
+            {"indexed": True, "type": "uint256", "name": "tokenId"}
+        ],
+        "name": "Approval",
+        "type": "event"
+    },
+    {
+        "anonymous": False,
+        "inputs": [
+            {"indexed": True, "type": "address", "name": "owner"},
+            {"indexed": True, "type": "address", "name": "operator"},
+            {"indexed": False, "type": "bool", "name": "approved"}
+        ],
+        "name": "ApprovalForAll",
+        "type": "event"
+    }
+]
+
+    # 合约实例化（替换为你的 NFT 合约地址）
+    NFT_ADDR = "0xf5059a5D33d5853360D16C683c16e67980206f36"
+    contract = web3.eth.contract(address=Web3.to_checksum_address(NFT_ADDR), abi=token_abi)
+    PRIVATE_KEY = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+    deployer = web3.eth.account.from_key(PRIVATE_KEY)
+    yield contract

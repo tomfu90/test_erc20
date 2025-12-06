@@ -1,0 +1,62 @@
+name: "ERC721 -->单 Token 全生命周期 + 单授权流转"
+description: "聚焦单个 NFT 的完整操作链: mint → transferFrom → approve → approved transferFrom → burn"
+
+steps:
+  - step: "步骤1:查询合约erc721和和创世地址相关信息"
+    #查询部署合约nft名字/符号+创世地址拥有的nft数量：name/symbol/balanceOf
+    action: search
+    address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"  #account[0]，创世地址
+
+  - step: "步骤2:创世地址铸造nft"
+    action: mint
+    token_id: "{{random_num}}" #取随机数，用渲染函数替换
+    address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"  #account[0]，创世地址
+    PRIVATE_KEY: "{{en.deployer_private_key}}"  #环境变量，用渲染函数替换,account[0]，创世地址秘钥
+    meta_uri: "fufu_baidu.com"
+    save_as:  token_id  #作为上下文变量传递，用渲染函数替换
+
+  - step: "步骤3:查询的nft所有者信息"
+    action: ownerOf
+    input:
+      token_id: "{{token_id}}"
+    expected:
+      address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"  #account[0]，创世地址-所有者
+
+  - step: "步骤4:创世地址将nft转移给其他地址"
+    action: transferFrom_owner
+    token_id: "{{token_id}}"
+    to_address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8" #account[1]，接受地址
+    PRIVATE_KEY: "{{en.deployer_private_key}}"  # account[0]创世地址秘钥
+    address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266"  #account[0]，创世地址
+
+  - step: "步骤5:nft所有者授权给其他第三方地址"
+    action: approve
+    token_id: "{{token_id}}"
+    to_address: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC" #account[2]，授权地址
+    PRIVATE_KEY: "{{en.address1_private_key}}" #account[1]，所有者地址秘钥
+    address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"  #account[1]，所有者地址
+
+
+  - step: "步骤6:查询nft授权信息"
+    action: getApproved
+    input:
+      token_id: "{{token_id}}"
+    expected:
+      address: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC" #account[2]，授权地址
+
+  - step: "步骤7:被授权者授权转账，将nft转给其他第三方"
+    action: transferFrom_approve
+    token_id: "{{token_id}}"
+    to_address: "0x90F79bf6EB2c4f870365E785982E1f101E93b906"  #account[3]，授权转账的接受地址
+    owner_address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8" #account[1]，所有者地址
+    PRIVATE_KEY: "{{en.address2_private_key}}" #account[2]，被授权者地址秘钥
+    approve_address: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC" #account[2]，授权地址
+
+  - step: "步骤8:nft所有者销毁nft"
+    action: burn
+    token_id: "{{token_id}}"
+    address: "0x90F79bf6EB2c4f870365E785982E1f101E93b906"  #account[3]，所有者地址
+    PRIVATE_KEY: "{{en.address3_private_key}}" #account[3]，最终所有者地址秘钥
+
+
+

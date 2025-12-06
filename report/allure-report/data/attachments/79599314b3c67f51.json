@@ -1,9 +1,0 @@
-{
-  "from": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-  "to": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
-  "value": 10000000000000000,
-  "gas": 21000,
-  "gasPrice": 1000000008,
-  "nonce": 134,
-  "chainId": 31337
-}

@@ -1,6 +1,6 @@
 # demo.py
 # fufu
-from local_node_utils import *
+from erc20_myusdt import *
 from eth_account import Account
 print("节点是否连接：", w3.is_connected())  # 无参数！
 accounts = w3.eth.accounts
